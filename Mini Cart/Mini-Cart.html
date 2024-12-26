@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays and Loops</title>
+</head>
+<body>
+     <h1>Shopping Cart</h1>
+
+    <div>
+        <input type="text" class="item-name" placeholder="Item Name">
+        <input type="number" class="item-quantity" placeholder="Quantity">
+        <input type="number" class="item-price" placeholder="Price">
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <h2>Your Cart</h2>
+    <ul class="cart-list"></ul>
+
+    <button class="clear-cart">Clear Cart</button> 
+
+    <script>
+        const array1 = [1,2,3]
+        const array2 = array1.slice();
+        array2.push(4)
+        console.log(array1)
+        console.log(array2)
+
+        const [firstValue, secondValue ] = [1,2,3]
+
+        for(let i= 1; i <= 10; i++){
+            if (i % 3 === 0){
+                i++;
+                continue;
+            }
+            console.log(i)
+            if (i === 8){
+                break;
+            }
+        }
+       
+
+        let i = 1;
+
+        while(i <= 10){
+            if(i % 3 === 0){
+                i++
+                continue;
+            }
+            console.log(i)
+            i++
+        }
+
+        function doubleArray(nums){
+        const numsDoubled = [];
+
+        for (let i = 0; i<nums.length; i++){
+            const num = nums[i];
+            if (num === 0){
+                return numsDoubled
+            }
+            numsDoubled.push(num*2);
+        }
+        return numsDoubled
+    }
+    console.log(doubleArray([1,1,3]));
+    console.log(doubleArray([2,2,5]))
+document.addEventListener('DOMContentLoaded', function() {
+    displayCart();
+
+    document.querySelector('.add-to-cart').addEventListener('click', function() {
+        addItemToCart();
+    });
+
+    document.querySelector('.clear-cart').addEventListener('click', function() {
+        clearCart();
+    });
+});
+
+function addItemToCart() {
+    let itemName = document.querySelector('.item-name').value.trim();
+    let itemQuantity = parseInt(document.querySelector('.item-quantity').value.trim());
+    let itemPrice = parseFloat(document.querySelector('.item-price').value.trim());
+
+    if (!itemName || isNaN(itemQuantity) || isNaN(itemPrice) || itemQuantity <= 0 || itemPrice <= 0) {
+        alert('Please enter valid item details.');
+        return;
+    }
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    let existingItem = cart.find(item => item.name === itemName);
+
+    if (existingItem) {
+        existingItem.quantity += itemQuantity;
+    } else {
+        cart.push({
+            name: itemName,
+            quantity: itemQuantity,
+            price: itemPrice
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCart();
+
+    document.querySelector('.item-name').value = '';
+    document.querySelector('.item-quantity').value = '';
+    document.querySelector('.item-price').value = '';
+}
+
+function displayCart() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartList = document.querySelector('.cart-list');
+    cartList.innerHTML = '';
+
+    cart.forEach((item, index) => {
+        let listItem = document.createElement('li');
+        listItem.textContent = `${item.name} - Quantity: ${item.quantity}kg, Price: $${item.price} (Total: $${(item.quantity * item.price).toFixed(2)})`;
+        
+        let updateButton = document.createElement('button');
+        updateButton.textContent = 'Update Quantity';
+        updateButton.addEventListener('click', function() {
+            let newQuantity = prompt('Enter new quantity:', item.quantity);
+            if (newQuantity !== null) {
+                newQuantity = parseInt(newQuantity);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                    item.quantity = newQuantity;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    displayCart();
+                } else {
+                    alert('Please enter a valid quantity.');
+                }
+            }
+        });
+
+        let removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', function() {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        });
+
+        listItem.appendChild(updateButton);
+        listItem.appendChild(removeButton);
+
+        cartList.appendChild(listItem);
+    });
+}
+
+function clearCart() {
+    localStorage.removeItem('cart');
+    displayCart();
+}
+
+        /* document.addEventListener('DOMContentLoaded', function(){
+            console.log(shoppingList)
+        })
+
+        let shoppingList = JSON.parse(localStorage.getItem('cart'))
+        let cart = [{
+            name: 'Apple',
+            id: '76518',
+            quantity: 8,
+            price: 699
+        }]
+        localStorage.setItem('cart', JSON.stringify(cart))
+         */
+        /* let buttonElement = document.querySelector('.button')
+        let clearButton = document.querySelector('.clear')
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || []
+
+        buttonElement.addEventListener('click', function(){
+            getValue();  
+        })
+        clearButton.addEventListener('click', function(){
+            clearTasks()
+        })
+
+        
+        function getValue(){
+            let inputElement = document.querySelector('.input')
+            let name = inputElement.value
+
+            tasks.push(name)
+
+            localStorage.setItem('tasks', JSON.stringify(tasks))
+            inputElement.value = ''  
+
+            console.log(tasks)
+        }
+
+        function clearTasks(){
+            tasks = []
+            localStorage.setItem('tasks', JSON.stringify(tasks))
+            console.log('All items are removed:',tasks)
+        } */
+        
+       /* const myArray = [
+        44,
+        12,
+        60
+    ]
+    myArray[2] = 70
+    console.log(myArray)
+    console.log(myArray[1])
+ */
+        // Removing Element 
+    /* const fruitCount = ['bannana', 'apple', 'strawberry']
+    const newLength = fruitCount.splice(1,2)
+    console.log(fruitCount) */
+
+        // Adding Elemet
+          /* const fruitCount = ['apple']
+            const newLength = fruitCount.splice(1,0,'strawberry','Mango','Grapes')
+            console.log(fruitCount)
+            console.log(fruitCount[2]) */
+
+        // Replcaing
+            /* myArray.splice(3,0,63,74,88)
+            console.log(myArray[0])
+            myArray.splice(0,1,63)
+            console.log(myArray) */
+
+        // Deleting From index 3 
+           /* myArray.splice(3)
+            console.log(myArray) */
+
+
+            /* let colors = ['red','blue','green','purple','pink']
+            console.log(colors.length)
+            colors.push('marginda','blue')
+            console.log(colors.length) */
+
+            /* let shoppingList = [];
+            shoppingList.push('milk','egg','bread','butter')
+            console.log(shoppingList.length) */
+
+            /* let fruits = ['apple','bannana','cherry','date']
+            console.log(fruits.length)
+            fruits.splice(1,2)
+            console.log(fruits)
+            fruits.splice(1,0,'grape','orange')
+            console.log(fruits) */
+
+           /*  let numbers = [10,20,30,40,50]
+            numbers.push(60,70)
+            numbers.splice(0,2,2,15)
+            console.log(numbers)
+            console.log(numbers.length) */
+
+           /*  let animals = ['dog','cat','bird','fish','hamster']
+            animals.splice(2,1,'parrot')
+            animals.splice(4)
+            console.log(animals)
+            console.log('Final Length:' + animals.length) */
+
+
+            /* let i = 1
+            while (i <= 5) {
+                console.log(i)
+                i++
+            } */
+
+            /* let sums = 0
+            let nums = 1
+
+            while (nums <= 5){
+                sums += nums
+                nums++
+            }
+            console.log('The sum is ' + sums) */
+
+           /*  let correctPassword = 'Swagkicks+2'
+            let userInput = prompt('Enter the Password:')
+
+            while (userInput !== correctPassword){
+                userInput = prompt('incorrect! Please try again:');
+            }
+            console.log('access Granted')
+ */
+            /* let numbers = [5,10,15,20,25,30];
+            let sum = 0;
+            let i = 0;
+
+            while (i < numbers.length) {
+                sum += numbers[i];
+                i++
+            }
+            console.log(sum) */
+
+          /*   let value = [12,5,8,130,44]
+            let maxValue = value[0]
+            let i = 1
+
+            while (i < value.length){
+                if(value[i] > maxValue){
+                    maxValue = value[i]
+                } 
+                    i++
+                
+            }
+            console.log(maxValue) */
+
+            /* let letters = ['a', 'b', 'c', 'd', 'e',]
+            let reverse = [] 
+            let i = letters.length - 1
+
+            while (i >= 0) {
+                reverse.push(letters[i]);
+                i--
+            }
+            console.log(reverse) */
+
+            /* let items = ['apple','banana','apple','orange','banana','apple']
+            let counts = 0
+            let i = 0
+            while (i < items.length) {
+                if (items[i] === 'apple') {
+                    counts++
+                }
+                i++
+            }
+            console.log(counts)
+         */
+
+
+         /* let numbers = [1,2,3,4,5,6,7,8,9,10]
+         let evenNumber = []
+         let i = 0
+         while (i < numbers.length){
+            if (numbers[i]  )
+         }
+         console.log(evenNumber) */
+
+         /* let numbers = [1,2,3,4,5,6,7,8,9,10]
+         let evenNumber = []
+         let i = 0
+
+         while(i < numbers.length){
+            if(numbers[i] % 2 === 0){
+                evenNumber.push(numbers[i])
+            }
+            i++
+         }
+         console.log('Even Number: ' + evenNumber) */
+
+        /*  let numbers = [4,1,2,4,7,8,3,3,2,6,5,9]
+         let uniqueNumber = []
+         let i = 0
+
+         while (i < numbers.length) {
+            if (!uniqueNumber.includes(numbers[i])){
+                uniqueNumber.push(numbers[i])
+            }
+            i++
+         }
+         console.log('Unique Number: ' + uniqueNumber) */
+
+         /* let numbers = [1,2,3,4,5]
+         let sum = 0
+         let i = 0
+
+         while (i < numbers.length) {
+            sum += numbers[i]
+            i++
+         }
+         console.log(sum) */
+
+         /* let numbers = [4,1,2,7,6,14,48,42]
+         let maximum= numbers[1]
+         let i = 0
+         while (i < numbers.length) {
+            if (numbers[i] > maximum){
+                maximum = numbers[i]
+            }   
+            i++
+         }
+         console.log(maximum) */
+
+         /* let numbers = [1,2,3,4,5,6]
+         let reverse = []
+         let i = numbers.length-1
+
+         while(i >= 0){
+            reverse.push(numbers[i])
+            i--
+         }
+         console.log(reverse) */
+/* 
+         let numbers = [1,2,3,1,3,2,5,6,2,8,2,]
+         let uniqueNumber = 2 
+         let count = 0
+         let i = 0
+
+         while (i < numbers.length){
+            if (numbers[i] === uniqueNumber) {
+                count++
+            }
+            i++
+         }
+         console.log('Number 2 = ' + count) */
+
+
+       /*   let number = [1,2,3,4,5,6,7,8,9,10]
+         let evenNumber = []
+         let i = 0
+         
+         while(i < number.length){
+            if (number[i] % 2 === 0) {
+                evenNumber.push(number[i])
+            }
+            i++
+         }
+         console.log(evenNumber) */
+
+
+//      Non-standard use while Loop
+      /*    let randomNumber = 0
+
+         while(randomNumber < 0.5){
+            randomNumber = Math.random();
+         }
+         console.log(randomNumber) */
+
+
+         /* const todoList = [
+            'make dinner',
+            'wash dishes',
+            'watch youtube'
+         ]
+         for (let i=0; i < todoList.length; i++ ) {
+            const value = todoList[i]
+            console.log(value)
+         } */
+
+        /*  const nums = [1,2,3,9,15 ]
+         let total = 0
+
+         for (let i = 0; i < nums.length; i++) {
+            const num = nums[i]
+            total += num
+         }
+         console.log(total)
+
+         const numsDoubled = []
+         for (let i = 0; i < nums.length; i++) {
+            const num = nums[i]
+            numsDoubled.push(num*2)
+         }
+         console.log(numsDoubled) */
+
+         /* let user = {
+            name: 'John Doe',
+            age: 30,
+            email: 'johndoe@example.com'
+         }
+          localStorage.setItem('user', JSON.stringify(user))
+
+         userProfile = JSON.parse(localStorage.getItem('user'))
+
+         console.log(userProfile) */
+    </script>
+</body>
+</html> 
